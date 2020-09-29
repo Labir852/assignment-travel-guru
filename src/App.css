@@ -1,6 +1,18 @@
 .App {
   text-align: center;
+  background-image: url('./travel-guru-master/Image/Rectangle\ 1.png');
+  background-repeat: no-repeat; 
+  background-position: center center;
+  background-attachment: fixed;
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  height: 100%;
+  width: 100%;
+  position: fixed;
 }
+
 
 .App-logo {
   height: 40vmin;

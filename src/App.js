@@ -1,25 +1,53 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { createContext, useState } from 'react';
 import './App.css';
-
+import Header from './Components/HEADER/Header';
+import Home from './Components/HOME/Home';
+import {
+  BrowserRouter as Router,
+  Switch,
+  Route
+} from "react-router-dom";
+import Login from './Components/LOGIN/Login';
+import Booking from './Components/BOOKING/Booking';
+import PrivateRoute from './Components/LOGIN/PrivateRoute';
+import Search from './Components/SEARCH/Search';
+export const UserContext = createContext();
 function App() {
+  const [loggedInUser,setLoggedInUser] = useState({})
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={[loggedInUser, setLoggedInUser]} >
+      <div className="App">
+     <Router>
+     <Header></Header>
+      <Switch>
+        <Route path="/home">
+          <Home></Home>
+        </Route>
+        <Route path="/booking/:placeName">
+          <Booking></Booking>
+        </Route>
+      
+        <Route path="/login">
+          <Login></Login>
+        </Route>
+
+        <PrivateRoute path="/Search/:placeName">
+              <Search></Search>
+            </PrivateRoute>
+
+        <Route exact path="/">
+          <Home></Home>
+        </Route>
+
+        <Route path="/*">
+          <h2 alignItems="center">404 Error!</h2>
+          <h4>Page not Found</h4>
+        </Route>
+        </Switch>
+     </Router>
+     </div>
+    </UserContext.Provider>
+    
   );
 }
 
