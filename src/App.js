@@ -13,7 +13,8 @@ import PrivateRoute from './Components/LOGIN/PrivateRoute';
 import Search from './Components/SEARCH/Search';
 export const UserContext = createContext();
 function App() {
-  const [loggedInUser,setLoggedInUser] = useState({})
+  const [loggedInUser,setLoggedInUser] = useState({});
+  console.log(loggedInUser.isSignedIn);
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]} >
       <div className="App">

@@ -31,7 +31,7 @@ const Booking = () => {
 
                     <Col lg={2} className="d-none d-lg-block"></Col>
 
-                    <Col lg={5} className="form-booking mb-5 mb-lg-0">
+                    <Col lg={5} className="bg-info mb-5 mb-lg-0">
                         <h2 className="text-center mb-3">Booking</h2>
                         <Form className="text-dark" style={{alignItems:'center'}}>
                             <InputGroup className="mb-3">

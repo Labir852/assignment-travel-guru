@@ -49,48 +49,9 @@ export const handleGoogleSignin = ()=>{
   }
 
 
-  export const createUserWithEmailAndPassword = (name,email,password) =>{
-    return firebase.auth().createUserWithEmailAndPassword( email, password)
-   .then(res => {
-     const newUserInfo =res.user;
-     newUserInfo.error = "";
-     newUserInfo.Success = true;
-     updateUserName(name);
-     return newUserInfo;
-   })
-   .catch(error=>
 
-    {
-     // Handle Errors here.
-     const newUserInfo={};
-     newUserInfo.error = error.message;
-     newUserInfo.Success = false;
-     return newUserInfo;
-     // ...
-   });
-   
- }
 
- export  const signInWithEmailAndPassword = (email,password) =>{
-    firebase.auth().signInWithEmailAndPassword(email,password)
-  .then(res => {
-    const newUserInfo =res.user;
-    newUserInfo.error = "";
-    newUserInfo.Success = true;
-    return newUserInfo;
-  })
-  .catch(function(error) {
-    // Handle Errors here.
-    const newUserInfo={};
-    newUserInfo.error = error.message;
-    newUserInfo.Success = false; 
-    return newUserInfo;
-    // ...
-  });
-  
-  }
-
-  const updateUserName = name =>{
+  export const updateUserName = name =>{
     const user = firebase.auth().currentUser;
   
     user.updateProfile({
@@ -98,6 +59,23 @@ export const handleGoogleSignin = ()=>{
     }).then().catch(function(err) {
       console.log(err);
     });
-    
   }
+
+  export const signOut = ()=>{ 
+    return firebase.auth().signOut()
+  .then(function() {
+    // Sign-out successful.
+    const signedInUser= {
+      isSignedIn: false,
+      name: '',
+      email: '',
+      password: '',
+      message: ''
+  }
+  return signedInUser;
+
+  }).catch(function(error) {
+    // An error happened.
+  });
+}
 

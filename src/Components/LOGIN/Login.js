@@ -9,7 +9,7 @@ import Fb from '../../travel-guru-master/Icon/fb.png';
 import Google from '../../travel-guru-master/Icon/google.png';
 import './Login.css';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { createUserWithEmailAndPassword, handlefbSignIn, handleGoogleSignin, initializeLoginFramework, signInWithEmailAndPassword } from './LoginManager';
+import { createUserWithEmailAndPassword, handlefbSignIn, handleGoogleSignin, initializeLoginFramework, signInWithEmailAndPassword, updateUserName } from './LoginManager';
 
 
 
@@ -31,7 +31,7 @@ function Login () {
   const {from} = location.state || {from:{pathname:"/"}};
   const handleResponse =(res,redirect)=>{
     setUser(res);
-    setLoggedInUser(res);
+    setLoggedInUser(res,user);
     if(redirect)
     {
       history.replace(from);
@@ -39,36 +39,60 @@ function Login () {
   }
 
   const handleSubmit = (e)=>{
+    console.log(user);
     if(newUser && user.email && user.password)
     {
-      createUserWithEmailAndPassword(user.email, user.password)
-      .then(res=>{
-        handleResponse(res,false);
+      firebase.auth().createUserWithEmailAndPassword(user.name,user.email, user.password)
+      .then(res => {
+       const {displayName, email} = res.user;
+                       const newUserInfo = {
+                           isSignedIn: true,
+                           name: displayName,
+                           email: email,
+                           message: 'Logged in Successfully',
+                           success : true
+                       }
+                      handleResponse(newUserInfo,true);
       })
-      .catch(function(error) {
-         // Handle Errors here.
-         const newUserInfo = {...user};
-          newUserInfo.error = error.message;
-         setUser(newUserInfo);
-         // ...
-       });
+      .catch(error=>
+   
+       {
+        // Handle Errors here.
+        const newUserInfo ={};
+        newUserInfo.error = error.message;
+        newUserInfo.Success = false;
+        // ...
+        setLoggedInUser(newUserInfo);
+      });
+      
 } 
 
 if(!newUser && user.email && user.password){
-  signInWithEmailAndPassword(user.email, user.password)
-  .then(res=>{
-    console.log(res);
-    handleResponse(res,true);
+  e.preventDefault();
+  firebase.auth().signInWithEmailAndPassword(user.email,user.password)
+  .then(res => {
+    const {displayName, email} = res.user;
+                    const newUserInfo = {
+                        isSignedIn: true,
+                        name: displayName,
+                        email: email,
+                        message: 'Logged in Successfully',
+                        success : true
+                    }
+                    updateUserName(displayName);
+                    handleResponse(newUserInfo,true);
   })
   .catch(function(error) {
     // Handle Errors here.
-    var errorCode = error.code;
-    var errorMessage = error.message;
-    console.log(errorCode, errorMessage);
+    const newUserInfo ={};
+     newUserInfo.error = error.message;
+     newUserInfo.success = false;
+     setLoggedInUser(newUserInfo);
+    //return newUserInfo;
     // ...
   });
   }
-  e.preventDefault();
+  
 }
 
 
