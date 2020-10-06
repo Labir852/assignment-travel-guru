@@ -11,9 +11,7 @@ import {Link} from "react-router-dom";
 
 import './Header.css';
 import { UserContext } from '../../App';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faSignInAlt } from '@fortawesome/free-solid-svg-icons';
-import { signOut } from '../LOGIN/LoginManager';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -98,7 +96,7 @@ const Header = () => {
 
           {
                             loggedInUser.isSignedIn ?
-                            <Button onClick={() => signOut} variant="warning" className="mx-2">Logout <br/> {loggedInUser.name}</Button> :
+                            <Button onClick={()=>setLoggedInUser({})} variant="warning" className="mx-2">Logout <br/> {loggedInUser.name}</Button> :
                             <Link to="/login"><Button  style={{ backgroundColor: '#F9A51A'}} color="primary"><b>Login</b></Button></Link>
                         }
 

@@ -17,7 +17,7 @@ function App() {
   console.log(loggedInUser.isSignedIn);
   return (
     <UserContext.Provider value={[loggedInUser, setLoggedInUser]} >
-      <div className="App">
+      <div className="App" id="root">
      <Router>
      <Header></Header>
       <Switch>

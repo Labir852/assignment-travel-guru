@@ -9,13 +9,11 @@ import Fb from '../../travel-guru-master/Icon/fb.png';
 import Google from '../../travel-guru-master/Icon/google.png';
 import './Login.css';
 import { Link, useHistory, useLocation } from 'react-router-dom';
-import { createUserWithEmailAndPassword, handlefbSignIn, handleGoogleSignin, initializeLoginFramework, signInWithEmailAndPassword, updateUserName } from './LoginManager';
+import { createUserWithEmailAndPassword, handlefbSignIn, handleGoogleSignin, initializeLoginFramework, signInWithEmailAndPassword} from './LoginManager';
 
 
 
 function Login () {
-  initializeLoginFramework();
-  const [loggedInUser,setLoggedInUser] =  useContext(UserContext);
   const [newUser, setNewUser] = useState(true);
   const [user,setUser]= useState({
     isSignedIn: false,
@@ -26,6 +24,8 @@ function Login () {
     error:"",
     Success: false
   });
+  initializeLoginFramework();
+  const [loggedInUser,setLoggedInUser] =  useContext(UserContext);
   const history = useHistory();
   const location = useLocation();
   const {from} = location.state || {from:{pathname:"/"}};
@@ -42,17 +42,9 @@ function Login () {
     console.log(user);
     if(newUser && user.email && user.password)
     {
-      firebase.auth().createUserWithEmailAndPassword(user.name,user.email, user.password)
+      createUserWithEmailAndPassword(user.name,user.email, user.password)
       .then(res => {
-       const {displayName, email} = res.user;
-                       const newUserInfo = {
-                           isSignedIn: true,
-                           name: displayName,
-                           email: email,
-                           message: 'Logged in Successfully',
-                           success : true
-                       }
-                      handleResponse(newUserInfo,true);
+                      handleResponse(res,true);
       })
       .catch(error=>
    
@@ -69,18 +61,9 @@ function Login () {
 
 if(!newUser && user.email && user.password){
   e.preventDefault();
-  firebase.auth().signInWithEmailAndPassword(user.email,user.password)
+  signInWithEmailAndPassword(user.email,user.password)
   .then(res => {
-    const {displayName, email} = res.user;
-                    const newUserInfo = {
-                        isSignedIn: true,
-                        name: displayName,
-                        email: email,
-                        message: 'Logged in Successfully',
-                        success : true
-                    }
-                    updateUserName(displayName);
-                    handleResponse(newUserInfo,true);
+                    handleResponse(res,true);
   })
   .catch(function(error) {
     // Handle Errors here.
@@ -147,6 +130,7 @@ const googleSignIn = () =>{
   .then(res=>{
       handleResponse(res,true);
   })
+
 }
 const fbSignIn = ()=>{
   handlefbSignIn()
@@ -154,6 +138,7 @@ const fbSignIn = ()=>{
     handleResponse(res,true);
   })
 }
+
     return (
 
 <Container className="text-center text-white">

@@ -36,7 +36,7 @@ export const handleGoogleSignin = ()=>{
     const fbprovider = new firebase.auth.FacebookAuthProvider();
     return firebase.auth().signInWithPopup(fbprovider)
     .then(function(result) {
-      var token = result.credential.accessToken;
+      //var token = result.credential.accessToken;
       var user = result.user;
       user.Success = true;
       return user;
@@ -46,6 +46,45 @@ export const handleGoogleSignin = ()=>{
       signedInUser.message = err.message;
     });
     
+  }
+
+  export const createUserWithEmailAndPassword = (name,email,password) =>{
+    return firebase.auth().createUserWithEmailAndPassword(email, password)
+    .then(res => {
+      const newUserInfo =res.user;
+      newUserInfo.error = "";
+      newUserInfo.Success = true;
+      updateUserName(name);
+      return newUserInfo;
+    })
+    .catch(error=>
+
+     {
+      // Handle Errors here.
+      const newUserInfo={};
+      newUserInfo.error = error.message;
+      newUserInfo.Success = false;
+      return newUserInfo;
+      // ...
+    });
+  }
+
+  export const signInWithEmailAndPassword = (email,password) =>{
+    return firebase.auth().signInWithEmailAndPassword(email,password)
+    .then(res => {
+      const newUserInfo =res.user;
+      newUserInfo.error = "";
+      newUserInfo.Success = true;
+      return newUserInfo;
+    })
+    .catch(function(error) {
+      // Handle Errors here.
+      const newUserInfo={};
+      newUserInfo.error = error.message;
+      newUserInfo.Success = false;
+      return newUserInfo; 
+      // ...
+    });
   }
 
 
@@ -60,22 +99,4 @@ export const handleGoogleSignin = ()=>{
       console.log(err);
     });
   }
-
-  export const signOut = ()=>{ 
-    return firebase.auth().signOut()
-  .then(function() {
-    // Sign-out successful.
-    const signedInUser= {
-      isSignedIn: false,
-      name: '',
-      email: '',
-      password: '',
-      message: ''
-  }
-  return signedInUser;
-
-  }).catch(function(error) {
-    // An error happened.
-  });
-}
 
